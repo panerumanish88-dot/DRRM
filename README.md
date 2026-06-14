@@ -404,7 +404,7 @@ Port 3000 already in use	Another process using the port	Change PORT=3001 in .env
 This project is licensed under the MIT License.
 
 👥 Authors
-Sanjay Datt Joshi — Initial work and development 📧 sanjayjoshi7409882635@gmail.com
+Manish paneru — Initial work and development 📧 panerumanish88@gmail.com
 
 🙏 Acknowledgments
 India Disaster Resource Network (IDRN) for data references
@@ -432,8 +432,8 @@ Packages
 No packages published
 Contributors
 2
-@SanjayDattJoshi
-SanjayDattJoshi Sanjay Datt Joshi
+@manishpaneru
+Manishpaneru Manish Paneru
 @Copilot
 Copilot
 Languages
