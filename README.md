@@ -364,101 +364,258 @@ curl -X PUT http://localhost:3000/roads/7 \
 
 # 🧮 Algorithms
 
-1. Priority Scoring
-Formula:
+# 🧮 Algorithms
 
-P = 0.5 × (severity / 5)  +  0.3 × (people / max_people)  +  0.2 × access_difficulty
-Component	Weight	Rationale
-Severity	50%	Directly reflects immediate danger to life
-Population (normalised)	30%	More people = greater total need
-Access Difficulty	20%	Hard-to-reach areas may need priority scheduling
-Example — Flood Zone A:
+## 1️⃣ Priority Scoring Engine
 
-severity     = 5   → S_norm = 5/5   = 1.0
-people       = 250 → N_norm = 250/400 = 0.625   (max is Landslide Area C with 400)
-access       = 1   (difficult)
+The system automatically ranks affected areas based on urgency using a weighted scoring formula.
 
-P = 0.5(1.0) + 0.3(0.625) + 0.2(1)
-  = 0.5 + 0.1875 + 0.2
-  = 0.8875  → HIGH PRIORITY (red marker, pulse animation)
-Time complexity: O(n log n) — one pass to find max, then sort
+### Formula
 
-2. Dijkstra's Shortest Path
-Purpose: Find optimal route from a relief center to an affected area.
+```text
+P = 0.5 × (Severity / 5)
+  + 0.3 × (Population / Max Population)
+  + 0.2 × Access Difficulty
+```
 
-Steps:
+### Weight Distribution
 
-Initialise all node distances to ∞; source node distance = 0
-Add all nodes to an unvisited set
-Pick the unvisited node with the smallest known distance
-For each neighbour, compute tentative distance (current + edge weight)
-If tentative < stored, update it and record the predecessor
-Mark current node as visited; stop if it is the destination
-Reconstruct path by backtracking through the predecessor map
-Key details:
+| Factor | Weight | Purpose |
+|----------|----------|----------|
+| Severity | 50% | Measures immediate danger to life |
+| Population Impact | 30% | Higher population means greater demand |
+| Accessibility Difficulty | 20% | Hard-to-reach areas may require priority scheduling |
 
-Nodes = all relief centers + all affected areas
-Edges = road connections (blocked roads are excluded entirely from the graph)
-Edge weight = distance_km or travel_time_minutes depending on useTime flag
-Time complexity: O(V²) with Set — sufficient for small networks; upgradeable to O((V+E) log V) with a binary heap
-3. Multi-Stop Routing (TSP Nearest-Neighbour)
-Finding the exact shortest route visiting N areas is NP-hard (Travelling Salesman Problem). The nearest-neighbour heuristic gives a good approximation in polynomial time:
+### Example Calculation
 
-Start at the relief center
-Run Dijkstra to every unvisited area; pick the nearest
-Move there, mark visited
-Repeat until all areas are visited
-Return to the starting center
-Quality: Typically within 20–25% of optimal. For 3–10 areas (typical disaster scenario) this is excellent performance with near-instant computation.
+```text
+Flood Zone A
 
-Time complexity: O(N²) where N = number of selected areas
+Severity = 5
+Population = 250
+Max Population = 400
+Access Difficulty = 1
 
-4. Resource Allocation
-Proportional distribution when supply cannot fully meet demand:
+P = 0.5(1.0)
+  + 0.3(0.625)
+  + 0.2(1)
 
-ratio = min(totalAvailable / totalRequired, 1.0)  // per resource type
-allocation = Math.floor(area.required × ratio)
-If supply ≥ demand, ratio = 1.0 and all needs are fully met. If supply < demand, every area gets the same proportional share.
+P = 0.8875
+```
 
-🐛 Troubleshooting
-Symptom	Cause	Fix
-Map shows 0 for all counts	Frontend loaded before backend started	Start backend first; click Refresh Map
-Map is blank / no tiles	No internet connection	OpenStreetMap tiles require internet access
-CORS error in browser console	Backend not running or wrong port	Verify server is on port 3000; check API_URL in app.js
-Route says "No route found"	All paths between nodes are blocked	Unblock a road or add an alternative connection
-Priority scores are all 0	Priorities not computed yet	Click "Calculate All Priorities" on Priority Scoring tab
-Map looks wrong after tab switch	Leaflet cannot measure hidden container	Already fixed — invalidateSize() fires on tab activation
-"Module not found" on start	Dependencies not installed	Run cd backend && npm install
-Port 3000 already in use	Another process using the port	Change PORT=3001 in .env and update API_URL in app.js
-🚀 Future Enhancements
- Real MongoDB / MongoDB Atlas integration (interface is already compatible)
- Real-time updates with Socket.io — push road-status changes to all dashboards instantly
- Route visualisation drawn on the map as a highlighted polyline
- Mobile responsive layout improvements
- JWT authentication with role-based access (field worker / coordinator / admin)
- Real-time satellite imagery integration (ISRO NDEM API)
- Machine learning for disaster severity prediction
- Multi-vehicle route optimisation
- SMS / WhatsApp integration for field updates
- Blockchain-based supply chain tracking
- IoT sensor integration
- Multi-language support
- A* pathfinding upgrade using GPS coordinates as heuristic
- 2-opt improvement for multi-stop route quality
-📄 License
-This project is licensed under the MIT License.
+🔴 Result: **High Priority Area**
 
-👥 Authors
-ManishPaneru — Initial work and development 📧 panerumanish88@gmail.com
+### Complexity
 
-🙏 Acknowledgments
-India Disaster Resource Network (IDRN) for data references
-National Disaster Management Authority (NDMA) for operational guidelines
-OpenStreetMap contributors for map tile data
-Leaflet.js team for the excellent open-source mapping library
-MongoDB and Express.js communities for documentation
-Made with ❤️ for disaster relief operations
+```text
+O(n log n)
+```
+
+---
+
+## 2️⃣ Route Optimization (Dijkstra Algorithm)
+
+Used to determine the shortest and most efficient route between relief centers and affected areas.
+
+### Process
+
+1. Initialize source node distance as `0`
+2. Set all other node distances to `∞`
+3. Select the nearest unvisited node
+4. Update neighboring distances
+5. Repeat until destination is reached
+6. Reconstruct the shortest path
+
+### Key Features
+
+✅ Distance-Based Routing
+
+✅ Travel-Time Optimization
+
+✅ Blocked Road Avoidance
+
+✅ Dynamic Network Support
+
+### Complexity
+
+```text
+O(V²)
+```
+
+Future optimization can reduce complexity to:
+
+```text
+O((V + E) log V)
+```
+
+using a Priority Queue (Min Heap).
+
+---
+
+## 3️⃣ Multi-Stop Route Planning
+
+The system uses the **Nearest Neighbour TSP Heuristic** to efficiently visit multiple affected areas.
+
+### Workflow
+
+```text
+Start at Relief Center
+        ↓
+Find Nearest Area
+        ↓
+Visit Area
+        ↓
+Find Next Nearest Area
+        ↓
+Repeat Until Complete
+        ↓
+Return to Base
+```
+
+### Benefits
+
+✅ Fast Execution
+
+✅ Near-Optimal Routes
+
+✅ Suitable for Emergency Logistics
+
+### Complexity
+
+```text
+O(N²)
+```
+
+---
+
+## 4️⃣ Resource Allocation Engine
+
+When resources are limited, supplies are distributed proportionally among affected areas.
+
+### Formula
+
+```text
+ratio = min(totalAvailable / totalRequired, 1.0)
+
+allocation = required × ratio
+```
+
+### Example
+
+```text
+Available Food Kits = 500
+Required Food Kits = 1000
+
+Ratio = 500 / 1000 = 0.5
+
+Area Requirement = 200
+
+Allocated = 200 × 0.5 = 100 Kits
+```
+
+### Benefits
+
+✅ Fair Distribution
+
+✅ Prevents Resource Starvation
+
+✅ Supports Large-Scale Operations
+
+---
+
+# 🐛 Troubleshooting
+
+| Issue | Possible Cause | Solution |
+|---------|---------|---------|
+| Dashboard shows zero data | Backend not running | Start backend and refresh |
+| Map tiles not loading | No internet connection | Check network connectivity |
+| CORS error | Incorrect API endpoint | Verify backend URL and port |
+| Route not found | Roads are blocked | Unblock roads or add alternate routes |
+| Priority scores remain zero | Priorities not computed | Run "Calculate Priorities" |
+| Dependencies missing | npm packages not installed | Run `npm install` |
+| Port already in use | Another service using port 3000 | Change PORT in `.env` |
+
+---
+
+# 🚀 Future Enhancements
+
+### Database & Infrastructure
+
+- MongoDB Atlas Integration
+- Redis Caching Layer
+- Docker Deployment Support
+
+### Real-Time Features
+
+- Socket.io Live Updates
+- Real-Time Road Status Monitoring
+- Multi-User Collaboration
+
+### Security
+
+- JWT Authentication
+- Role-Based Access Control (RBAC)
+- Audit Logging
+
+### AI & Analytics
+
+- Disaster Severity Prediction
+- Demand Forecasting
+- Resource Optimization using ML
+
+### Routing Improvements
+
+- A* Pathfinding Algorithm
+- Multi-Vehicle Route Optimization
+- Route Visualization on Interactive Map
+- 2-Opt Route Refinement
+
+### Integrations
+
+- WhatsApp Notifications
+- SMS Alerts
+- IoT Sensor Data Integration
+- Satellite Imagery Support
+
+### User Experience
+
+- Mobile Responsive Dashboard
+- Offline Mode Support
+- Multi-Language Support
+
+---
+
+# 📄 License
+
+Licensed under the **MIT License**.
+
+---
+
+# 👨‍💻 Author
+
+### Manish Paneru
+
+📧 **Email:** panerumanish88@gmail.com
+
+🔗 **GitHub:** https://github.com/panerumanish88-dot
+
+💻 Full Stack Developer | DSA Enthusiast | Open Source Learner
+
+---
+
+# 🙏 Acknowledgments
+
+- India Disaster Resource Network (IDRN)
+- National Disaster Management Authority (NDMA)
+- OpenStreetMap Contributors
+- Leaflet.js Community
+- MongoDB Community
+- Express.js Community
+
+---
+
+⭐ If you found this project useful, consider giving it a star.
+
+**Made with ❤️ by Manish Paneru**
 
 
-
-Made with ❤️ by **Manish Paneru**
