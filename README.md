@@ -54,16 +54,46 @@ Helping NGOs, Government Agencies and Emergency Response Teams efficiently manag
 | 🔌 REST API | Complete backend API |
 
 
-Map Features (New in v1.1)
-✅ Green markers for relief centers with inventory popup
-✅ Colour-coded area markers — Red (high priority), Orange (medium), Blue (low) with animated pulse on critical zones
-✅ Blue polylines for open roads with distance/time tooltip
-✅ Red dashed lines for blocked roads
-✅ Layer toggles — show/hide centers, areas, or roads independently
-✅ Fit All button to zoom map to encompass all data points
-✅ Auto-refresh — map updates whenever data changes (add/remove/simulate)
-✅ Dark tile theme — OpenStreetMap tiles filtered to match the command-centre aesthetic
+## 🗺️ Map Features (v1.1)
 
+The **Network Overview Map** provides a real-time visual representation of relief operations, enabling responders to monitor resources, affected areas, and transportation networks efficiently.
+
+### Key Features
+
+| Feature | Description |
+|----------|------------|
+| 🟢 Relief Center Markers | Interactive green markers displaying inventory information through popups |
+| 🔴🟠🔵 Priority-Based Area Markers | Color-coded affected areas based on urgency level (High, Medium, Low) |
+| ✨ Critical Area Highlighting | Animated pulse effect for high-priority zones requiring immediate attention |
+| 🛣️ Open Road Visualization | Blue polylines showing active road connections with distance and travel-time details |
+| 🚫 Blocked Road Detection | Red dashed lines indicating inaccessible or blocked routes |
+| 🎛️ Layer Controls | Toggle visibility of relief centers, affected areas, and road networks independently |
+| 🎯 Fit-All Navigation | Instantly zoom and center the map to display the entire operational network |
+| 🔄 Auto Refresh | Automatically updates whenever centers, areas, roads, or simulations change |
+| 🌙 Command Center Theme | Dark-themed OpenStreetMap styling optimized for emergency operations dashboards |
+
+### Visual Indicators
+
+| Element | Meaning |
+|----------|---------|
+| 🟢 Green Marker | Relief Center |
+| 🔴 Red Marker | High Priority Area |
+| 🟠 Orange Marker | Medium Priority Area |
+| 🔵 Blue Marker | Low Priority Area |
+| 🔵 Blue Line | Open Road |
+| 🚫 Red Dashed Line | Blocked Road |
+
+### Benefits
+
+✅ Improved Situational Awareness
+
+✅ Faster Decision Making
+
+✅ Real-Time Network Monitoring
+
+✅ Better Route Planning
+
+✅ Enhanced Disaster Response Coordination
 ---
 
 # 🛠️ Tech Stack
