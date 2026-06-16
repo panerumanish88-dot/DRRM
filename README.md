@@ -364,87 +364,101 @@ curl -X PUT http://localhost:3000/roads/7 \
 
 # 🧮 Algorithms
 
-## Priority Scoring
+1. Priority Scoring
+Formula:
 
-```text
-P = 0.5 × (Severity / 5)
-  + 0.3 × (Population / Max Population)
-  + 0.2 × Access Difficulty
-```
+P = 0.5 × (severity / 5)  +  0.3 × (people / max_people)  +  0.2 × access_difficulty
+Component	Weight	Rationale
+Severity	50%	Directly reflects immediate danger to life
+Population (normalised)	30%	More people = greater total need
+Access Difficulty	20%	Hard-to-reach areas may need priority scheduling
+Example — Flood Zone A:
 
-## Dijkstra Algorithm
+severity     = 5   → S_norm = 5/5   = 1.0
+people       = 250 → N_norm = 250/400 = 0.625   (max is Landslide Area C with 400)
+access       = 1   (difficult)
 
-Used for:
+P = 0.5(1.0) + 0.3(0.625) + 0.2(1)
+  = 0.5 + 0.1875 + 0.2
+  = 0.8875  → HIGH PRIORITY (red marker, pulse animation)
+Time complexity: O(n log n) — one pass to find max, then sort
 
-- Shortest Path
-- Route Optimization
-- Blocked Road Avoidance
+2. Dijkstra's Shortest Path
+Purpose: Find optimal route from a relief center to an affected area.
 
-Complexity:
+Steps:
 
-```text
-O(V²)
-```
+Initialise all node distances to ∞; source node distance = 0
+Add all nodes to an unvisited set
+Pick the unvisited node with the smallest known distance
+For each neighbour, compute tentative distance (current + edge weight)
+If tentative < stored, update it and record the predecessor
+Mark current node as visited; stop if it is the destination
+Reconstruct path by backtracking through the predecessor map
+Key details:
 
-## Multi-Stop Routing
+Nodes = all relief centers + all affected areas
+Edges = road connections (blocked roads are excluded entirely from the graph)
+Edge weight = distance_km or travel_time_minutes depending on useTime flag
+Time complexity: O(V²) with Set — sufficient for small networks; upgradeable to O((V+E) log V) with a binary heap
+3. Multi-Stop Routing (TSP Nearest-Neighbour)
+Finding the exact shortest route visiting N areas is NP-hard (Travelling Salesman Problem). The nearest-neighbour heuristic gives a good approximation in polynomial time:
 
-Nearest-Neighbour TSP Heuristic
+Start at the relief center
+Run Dijkstra to every unvisited area; pick the nearest
+Move there, mark visited
+Repeat until all areas are visited
+Return to the starting center
+Quality: Typically within 20–25% of optimal. For 3–10 areas (typical disaster scenario) this is excellent performance with near-instant computation.
 
-## Resource Allocation
+Time complexity: O(N²) where N = number of selected areas
 
-```text
-Allocation = Required × Ratio
-```
+4. Resource Allocation
+Proportional distribution when supply cannot fully meet demand:
 
----
+ratio = min(totalAvailable / totalRequired, 1.0)  // per resource type
+allocation = Math.floor(area.required × ratio)
+If supply ≥ demand, ratio = 1.0 and all needs are fully met. If supply < demand, every area gets the same proportional share.
 
-# 🐛 Troubleshooting
-
-| Problem | Solution |
-|----------|----------|
-| Backend not responding | Start server with npm run dev |
-| CORS Error | Verify backend port |
-| Map not loading | Check internet connection |
-| No route found | Unblock roads or add connections |
-
----
-
-# 🚀 Future Enhancements
-
-- MongoDB Atlas Integration
-- JWT Authentication
-- Socket.io Real-Time Updates
-- Mobile Responsive Dashboard
-- AI-Based Severity Prediction
-- Multi-Vehicle Route Optimization
-- WhatsApp Notifications
-- IoT Sensor Integration
-- A* Pathfinding Upgrade
-
----
-
-# 👨‍💻 Author
-
-### Manish Paneru
-
-📧 panerumanish88@gmail.com
-
-🔗 https://github.com/panerumanish88-dot
-
-💻 Full Stack Developer | DSA Enthusiast | Open Source Learner
-
----
-
-# 📄 License
-
+🐛 Troubleshooting
+Symptom	Cause	Fix
+Map shows 0 for all counts	Frontend loaded before backend started	Start backend first; click Refresh Map
+Map is blank / no tiles	No internet connection	OpenStreetMap tiles require internet access
+CORS error in browser console	Backend not running or wrong port	Verify server is on port 3000; check API_URL in app.js
+Route says "No route found"	All paths between nodes are blocked	Unblock a road or add an alternative connection
+Priority scores are all 0	Priorities not computed yet	Click "Calculate All Priorities" on Priority Scoring tab
+Map looks wrong after tab switch	Leaflet cannot measure hidden container	Already fixed — invalidateSize() fires on tab activation
+"Module not found" on start	Dependencies not installed	Run cd backend && npm install
+Port 3000 already in use	Another process using the port	Change PORT=3001 in .env and update API_URL in app.js
+🚀 Future Enhancements
+ Real MongoDB / MongoDB Atlas integration (interface is already compatible)
+ Real-time updates with Socket.io — push road-status changes to all dashboards instantly
+ Route visualisation drawn on the map as a highlighted polyline
+ Mobile responsive layout improvements
+ JWT authentication with role-based access (field worker / coordinator / admin)
+ Real-time satellite imagery integration (ISRO NDEM API)
+ Machine learning for disaster severity prediction
+ Multi-vehicle route optimisation
+ SMS / WhatsApp integration for field updates
+ Blockchain-based supply chain tracking
+ IoT sensor integration
+ Multi-language support
+ A* pathfinding upgrade using GPS coordinates as heuristic
+ 2-opt improvement for multi-stop route quality
+📄 License
 This project is licensed under the MIT License.
 
----
+👥 Authors
+ManishPaneru — Initial work and development 📧 panerumanish88@gmail.com
 
-# ⭐ Support
+🙏 Acknowledgments
+India Disaster Resource Network (IDRN) for data references
+National Disaster Management Authority (NDMA) for operational guidelines
+OpenStreetMap contributors for map tile data
+Leaflet.js team for the excellent open-source mapping library
+MongoDB and Express.js communities for documentation
+Made with ❤️ for disaster relief operations
 
-If you found this project useful, consider giving it a star.
 
-Made with ❤️ by **Manish Paneru**
 
 Made with ❤️ by **Manish Paneru**
