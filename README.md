@@ -362,7 +362,6 @@ curl -X PUT http://localhost:3000/roads/7 \
 
 ---
 
-# 🧮 Algorithms
 
 # 🧮 Algorithms
 
