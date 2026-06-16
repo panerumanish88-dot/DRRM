@@ -19,127 +19,73 @@ Helping NGOs, Government Agencies and Emergency Response Teams efficiently manag
 
 ---
 
-## 📖 Overview
+# 🚨 Disaster Relief Command Center
 
-Disaster Relief Command Center is a full-stack web application built to improve disaster response operations through intelligent resource allocation, priority-based decision making, and route optimization.
+Full-Stack Web Application: Express.js + In-Memory DB (MongoDB-ready) + Vanilla JavaScript + Leaflet.js
 
-The system enables authorities and NGOs to:
+A data-driven disaster relief resource allocation and route optimization system that helps NGOs and authorities prioritize affected locations, allocate limited resources efficiently, and compute optimal delivery routes during emergencies.
 
-- Identify high-priority affected areas
-- Allocate limited resources efficiently
-- Monitor road connectivity
-- Optimize delivery routes
-- Simulate disaster scenarios
-- Visualize operations on an interactive map
+### 📋 Table of Contents
 
----
-
-## 🌟 Key Features
-
-### 🗺️ Interactive Disaster Network Map
-- Real-time visualization using Leaflet.js
-- Relief centers and affected area tracking
-- Road network monitoring
-- Blocked road detection
-- Layer visibility controls
-
-### 🎯 Priority Scoring Engine
-Automatically ranks affected areas using:
-
-- Disaster Severity
-- Population Impact
-- Accessibility Difficulty
-
-### 📦 Resource Allocation System
-- Food kit management
-- Water inventory management
-- Medical supply tracking
-- Proportional resource distribution
-
-### 🛣️ Route Optimization
-- Dijkstra's Shortest Path Algorithm
-- Distance optimization
-- Travel-time optimization
-- Blocked road avoidance
-
-### 🔀 Multi-Stop Route Planning
-- Nearest Neighbour TSP Heuristic
-- Efficient multi-location delivery planning
-
-### 📊 Dashboard Analytics
-- Real-time statistics
-- Priority rankings
-- Resource summaries
-- Network monitoring
-
-### 🔄 What-If Simulation
-- Block roads temporarily
-- Test operational impact
-- Non-destructive scenario analysis
+- Features
+- Tech Stack
+- System Architecture
+- Project Structure
+- Installation & Setup
+- Usage
+- Network Overview Map
+- API Documentation
+- Algorithms
+- Troubleshooting
+- Future Enhancements
+- License
 
 ---
 
-## 📸 Screenshots
+# ✨ Features
 
-### Dashboard
+## Core Functionality
 
-> Add dashboard screenshot here
-
-![Dashboard](images/dashboard.png)
-
----
-
-### Network Overview Map
-
-> Add map screenshot here
-
-![Map](images/network-map.png)
-
----
-
-### Route Planning
-
-> Add route planning screenshot here
-
-![Routing](images/routing.png)
+| Feature | Description |
+|----------|------------|
+| 🗺️ Network Overview Map | Interactive Leaflet.js map showing centers, areas, and roads |
+| 🎯 Priority Scoring Engine | Automatically ranks affected areas using weighted scoring |
+| 📦 Resource Management | Track inventories and resource requirements |
+| 🛣️ Route Optimization | Dijkstra's shortest path computation |
+| 🔀 Multi-Stop Routing | Nearest-Neighbour TSP heuristic |
+| 📊 Dashboard Analytics | Real-time statistics and monitoring |
+| 🔄 What-If Simulation | Block/unblock roads and test impact |
+| 💾 Data Persistence | In-memory storage with MongoDB-ready structure |
+| 🔌 REST API | Complete backend API |
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
-### Frontend
+## Backend
 
-| Technology | Purpose |
-|------------|----------|
-| HTML5 | Structure |
-| CSS3 | Styling |
-| JavaScript ES6+ | Application Logic |
-| Leaflet.js | Interactive Mapping |
+| Component | Technology |
+|------------|------------|
+| Runtime | Node.js |
+| Framework | Express.js |
+| Database | In-Memory Database |
+| Future Upgrade | MongoDB |
+| Middleware | cors, dotenv |
+| Dev Server | nodemon |
 
-### Backend
+## Frontend
 
-| Technology | Purpose |
-|------------|----------|
-| Node.js | Runtime Environment |
-| Express.js | REST API Framework |
-
-### Database
-
-| Technology | Purpose |
-|------------|----------|
-| In-Memory Database | Current Storage |
-| MongoDB | Future Upgrade |
-
-### Development Tools
-
-- Git
-- GitHub
-- Nodemon
-- Postman
+| Component | Technology |
+|------------|------------|
+| Structure | HTML5 |
+| Styling | CSS3 |
+| Logic | Vanilla JavaScript |
+| Mapping | Leaflet.js |
+| API Calls | Fetch API |
 
 ---
 
-## 🏗️ System Architecture
+# 🏗️ System Architecture
 
 ```text
 CLIENT (Browser)
@@ -165,7 +111,7 @@ DATABASE
 └── Road Network
 ```
 
-## 📂 Project Structure
+# 📁 Project Structure
 
 ```text
 DRRM/
@@ -188,33 +134,28 @@ DRRM/
 └── README.md
 ```
 
-## 🚀 Installation
+# 📦 Installation & Setup
 
-### Clone Repository
+## Prerequisites
 
-```bash
-git clone https://github.com/panerumanish88-dot/DRRM.git
-```
+- Node.js v18+
+- npm
+- Modern Browser
 
-### Move Into Project
-
-```bash
-cd DRRM/backend
-```
-
-### Install Dependencies
+## Install Dependencies
 
 ```bash
+cd backend
 npm install
 ```
 
-### Start Server
+## Start Server
 
 ```bash
 npm run dev
 ```
 
-Server runs at:
+Server:
 
 ```text
 http://localhost:3000
@@ -222,75 +163,57 @@ http://localhost:3000
 
 ---
 
-## 🚀 Usage
+# 🚀 Usage
 
-### Step 1
-Start Backend Server
+### 1. Dashboard & Map
 
-### Step 2
-Open Frontend
+- Open application
+- View relief centers and affected areas
+- Monitor road network
 
-### Step 3
-Calculate Priority Scores
+### 2. Compute Priorities
 
-### Step 4
-Allocate Resources
+- Calculate urgency scores
+- Rank affected regions
 
-### Step 5
-Generate Delivery Routes
+### 3. Route Planning
 
-### Step 6
-Run Simulations
+- Select center and area
+- Generate shortest path
 
----
+### 4. Multi-Stop Routing
 
-## 🧮 Algorithms Used
+- Select multiple destinations
+- Generate optimized route
 
-### Priority Scoring Formula
+### 5. Simulation
 
-```text
-P = 0.5 × (Severity / 5)
-  + 0.3 × (Population / Max Population)
-  + 0.2 × Access Difficulty
-```
-
-### Dijkstra's Algorithm
-
-Used for:
-
-- Shortest path calculation
-- Route optimization
-- Blocked road avoidance
-
-Complexity:
-
-```text
-O(V²)
-```
-
-### Multi-Stop Routing
-
-Nearest Neighbour TSP Heuristic
-
-Benefits:
-
-- Fast computation
-- Good route approximation
-- Suitable for emergency logistics
-
-### Resource Allocation
-
-```text
-Allocation = Required × Ratio
-```
-
-Ensures fair distribution when resources are limited.
+- Block or unblock roads
+- Observe operational impact
 
 ---
 
-## 🔌 REST API Highlights
+# 🗺️ Network Overview Map
 
-### Centers
+### Features
+
+✅ Relief Center Tracking
+
+✅ Priority-Based Area Markers
+
+✅ Open & Blocked Road Visualization
+
+✅ Layer Controls
+
+✅ Auto Refresh
+
+✅ Interactive Popups
+
+---
+
+# 📡 API Documentation
+
+## Centers
 
 ```http
 GET /centers
@@ -299,7 +222,7 @@ PUT /centers/:id
 DELETE /centers/:id
 ```
 
-### Areas
+## Areas
 
 ```http
 GET /areas
@@ -308,7 +231,7 @@ PUT /areas/:id
 DELETE /areas/:id
 ```
 
-### Roads
+## Roads
 
 ```http
 GET /roads
@@ -317,7 +240,7 @@ PUT /roads/:id
 DELETE /roads/:id
 ```
 
-### Analytics
+## Analytics
 
 ```http
 POST /compute-priorities
@@ -325,7 +248,7 @@ POST /allocate-resources
 POST /simulate
 ```
 
-### Routing
+## Routing
 
 ```http
 GET /routes
@@ -334,13 +257,59 @@ POST /routes/multi-stop
 
 ---
 
-## 🚀 Future Enhancements
+# 🧮 Algorithms
+
+## Priority Scoring
+
+```text
+P = 0.5 × (Severity / 5)
+  + 0.3 × (Population / Max Population)
+  + 0.2 × Access Difficulty
+```
+
+## Dijkstra Algorithm
+
+Used for:
+
+- Shortest Path
+- Route Optimization
+- Blocked Road Avoidance
+
+Complexity:
+
+```text
+O(V²)
+```
+
+## Multi-Stop Routing
+
+Nearest-Neighbour TSP Heuristic
+
+## Resource Allocation
+
+```text
+Allocation = Required × Ratio
+```
+
+---
+
+# 🐛 Troubleshooting
+
+| Problem | Solution |
+|----------|----------|
+| Backend not responding | Start server with npm run dev |
+| CORS Error | Verify backend port |
+| Map not loading | Check internet connection |
+| No route found | Unblock roads or add connections |
+
+---
+
+# 🚀 Future Enhancements
 
 - MongoDB Atlas Integration
 - JWT Authentication
 - Socket.io Real-Time Updates
 - Mobile Responsive Dashboard
-- Satellite Data Integration
 - AI-Based Severity Prediction
 - Multi-Vehicle Route Optimization
 - WhatsApp Notifications
@@ -349,26 +318,28 @@ POST /routes/multi-stop
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 ### Manish Paneru
 
-📧 Email: panerumanish88@gmail.com
+📧 panerumanish88@gmail.com
 
-🔗 GitHub: https://github.com/panerumanish88-dot
+🔗 https://github.com/panerumanish88-dot
 
 💻 Full Stack Developer | DSA Enthusiast | Open Source Learner
 
 ---
 
-## 📄 License
+# 📄 License
 
 This project is licensed under the MIT License.
 
 ---
 
-## ⭐ Support
+# ⭐ Support
 
 If you found this project useful, consider giving it a star.
+
+Made with ❤️ by **Manish Paneru**
 
 Made with ❤️ by **Manish Paneru**
