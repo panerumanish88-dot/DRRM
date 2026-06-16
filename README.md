@@ -1,448 +1,374 @@
-🚨 Disaster Relief Command Center
-Full-Stack Web Application: Express.js + In-Memory DB (MongoDB-ready) + Vanilla JavaScript + Leaflet.js
+# 🚨 Disaster Relief Command Center
 
-A data-driven disaster relief resource allocation and route optimization system that helps NGOs and authorities prioritize affected locations, allocate limited resources efficiently, and compute optimal delivery routes during emergencies.
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-v18+-green?style=for-the-badge&logo=node.js">
+  <img src="https://img.shields.io/badge/Express.js-4.18+-black?style=for-the-badge&logo=express">
+  <img src="https://img.shields.io/badge/JavaScript-ES6+-yellow?style=for-the-badge&logo=javascript">
+  <img src="https://img.shields.io/badge/Leaflet.js-Interactive%20Maps-blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/MongoDB-Ready-success?style=for-the-badge&logo=mongodb">
+  <img src="https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge">
+</p>
 
-v1.1 Update: Now includes a fully interactive Network Overview Map powered by Leaflet.js — showing relief centers, affected areas, and road connections (including blocked roads) live on a real map.
+<p align="center">
+  <b>Full-Stack Disaster Relief Resource Allocation & Route Optimization Platform</b>
+</p>
 
-📋 Table of Contents
-Features
-Tech Stack
-System Architecture
-Project Structure
-Installation & Setup
-Usage
-Network Overview Map
-API Documentation
-Algorithms
-Troubleshooting
-Future Enhancements
-✨ Features
-Core Functionality
-Feature	Description
-🗺️ Network Overview Map	Interactive Leaflet.js map showing centers, areas, and roads with live status
-🎯 Priority Scoring Engine	Automatically ranks affected areas using a weighted algorithm
-📦 Resource Management	Track relief center inventories and affected area needs
-🛣️ Route Optimization	Dijkstra's algorithm for shortest-path computation
-🔀 Multi-Stop Routing	Nearest-neighbour TSP heuristic for visiting multiple areas
-📊 Real-time Dashboard	Live statistics, priority rankings, and road network status
-🔄 What-If Simulation	Temporarily block/unblock roads to test operational impact
-💾 Data Persistence	In-memory store with MongoDB-ready interface
-🔌 RESTful API	Complete backend API for all operations
-Map Features (New in v1.1)
-✅ Green markers for relief centers with inventory popup
-✅ Colour-coded area markers — Red (high priority), Orange (medium), Blue (low) with animated pulse on critical zones
-✅ Blue polylines for open roads with distance/time tooltip
-✅ Red dashed lines for blocked roads
-✅ Layer toggles — show/hide centers, areas, or roads independently
-✅ Fit All button to zoom map to encompass all data points
-✅ Auto-refresh — map updates whenever data changes (add/remove/simulate)
-✅ Dark tile theme — OpenStreetMap tiles filtered to match the command-centre aesthetic
-🛠️ Tech Stack
-Backend
-Component	Technology
-Runtime	Node.js v18+
-Framework	Express.js 4.18+
-Database	In-memory JavaScript class (MongoDB-ready)
-ODM	Mongoose 8.0+ (optional, for MongoDB upgrade)
-Middleware	cors, body-parser, dotenv
-Dev Server	nodemon 3.0+
-Frontend
-Component	Technology
-Structure	HTML5 (Single-Page Application)
-Styling	CSS3 with custom dark command-centre theme
-Logic	Vanilla JavaScript ES6+
-Map	Leaflet.js 1.9.4 with OpenStreetMap tiles
-Fonts	Orbitron (headings), Rajdhani (body) via Google Fonts
-API Calls	Fetch API with async/await
-🏗️ System Architecture
-┌──────────────────────────────────────────────────────────────┐
-│                     CLIENT (Browser)                         │
-│         HTML + CSS + JavaScript + Leaflet.js Map             │
-└────────────────┬─────────────────────────────────────────────┘
-                 │ HTTP Requests (Fetch API)
-                 ▼
-┌──────────────────────────────────────────────────────────────┐
-│                   EXPRESS.JS SERVER (port 3000)              │
-│  ┌──────────────────────────────────────────────────────┐    │
-│  │  REST API Routes                                     │    │
-│  │  GET/POST/PUT/DELETE  /centers /areas /roads         │    │
-│  │  POST  /compute-priorities  /allocate-resources      │    │
-│  │  GET   /routes              POST /routes/multi-stop  │    │
-│  │  POST  /simulate                                     │    │
-│  ├──────────────────────────────────────────────────────┤    │
-│  │  priorityScorer.js   — weighted P-score formula      │    │
-│  │  routingEngine.js    — Dijkstra + TSP nearest-nbr    │    │
-│  │  database.js         — in-memory CRUD store          │    │
-│  └──────────────────────────────────────────────────────┘    │
-└────────────────┬─────────────────────────────────────────────┘
-                 │ (swap database.js for Mongoose)
-                 ▼
-┌──────────────────────────────────────────────────────────────┐
-│               DATABASE (In-Memory / MongoDB)                 │
-│   ┌────────────┐   ┌────────────┐   ┌────────────┐          │
-│   │  Centers   │   │   Areas    │   │   Roads    │          │
-│   └────────────┘   └────────────┘   └────────────┘          │
-└──────────────────────────────────────────────────────────────┘
-Node ID Convention
-Centers use their raw IDs (1, 2, 3...). Areas are stored in the routing graph as area.id + 1000 (e.g. area #1 → node 1001). This prevents ID collisions when both types share the same graph — used consistently across database.js, routingEngine.js, and the frontend map.
+<p align="center">
+Helping NGOs, Government Agencies and Emergency Response Teams efficiently manage relief operations during disaster situations.
+</p>
 
-📁 Project Structure
-dssrCopy/
+---
+
+## 📖 Overview
+
+Disaster Relief Command Center is a full-stack web application built to improve disaster response operations through intelligent resource allocation, priority-based decision making, and route optimization.
+
+The system enables authorities and NGOs to:
+
+- Identify high-priority affected areas
+- Allocate limited resources efficiently
+- Monitor road connectivity
+- Optimize delivery routes
+- Simulate disaster scenarios
+- Visualize operations on an interactive map
+
+---
+
+## 🌟 Key Features
+
+### 🗺️ Interactive Disaster Network Map
+- Real-time visualization using Leaflet.js
+- Relief centers and affected area tracking
+- Road network monitoring
+- Blocked road detection
+- Layer visibility controls
+
+### 🎯 Priority Scoring Engine
+Automatically ranks affected areas using:
+
+- Disaster Severity
+- Population Impact
+- Accessibility Difficulty
+
+### 📦 Resource Allocation System
+- Food kit management
+- Water inventory management
+- Medical supply tracking
+- Proportional resource distribution
+
+### 🛣️ Route Optimization
+- Dijkstra's Shortest Path Algorithm
+- Distance optimization
+- Travel-time optimization
+- Blocked road avoidance
+
+### 🔀 Multi-Stop Route Planning
+- Nearest Neighbour TSP Heuristic
+- Efficient multi-location delivery planning
+
+### 📊 Dashboard Analytics
+- Real-time statistics
+- Priority rankings
+- Resource summaries
+- Network monitoring
+
+### 🔄 What-If Simulation
+- Block roads temporarily
+- Test operational impact
+- Non-destructive scenario analysis
+
+---
+
+## 📸 Screenshots
+
+### Dashboard
+
+> Add dashboard screenshot here
+
+![Dashboard](images/dashboard.png)
+
+---
+
+### Network Overview Map
+
+> Add map screenshot here
+
+![Map](images/network-map.png)
+
+---
+
+### Route Planning
+
+> Add route planning screenshot here
+
+![Routing](images/routing.png)
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+| Technology | Purpose |
+|------------|----------|
+| HTML5 | Structure |
+| CSS3 | Styling |
+| JavaScript ES6+ | Application Logic |
+| Leaflet.js | Interactive Mapping |
+
+### Backend
+
+| Technology | Purpose |
+|------------|----------|
+| Node.js | Runtime Environment |
+| Express.js | REST API Framework |
+
+### Database
+
+| Technology | Purpose |
+|------------|----------|
+| In-Memory Database | Current Storage |
+| MongoDB | Future Upgrade |
+
+### Development Tools
+
+- Git
+- GitHub
+- Nodemon
+- Postman
+
+---
+
+## 🏗️ System Architecture
+
+```text
+CLIENT (Browser)
+│
+├── HTML5
+├── CSS3
+├── JavaScript
+└── Leaflet.js
+        │
+        ▼
+EXPRESS.JS SERVER
+│
+├── REST APIs
+├── Priority Engine
+├── Routing Engine
+└── Resource Manager
+        │
+        ▼
+DATABASE
+│
+├── Relief Centers
+├── Affected Areas
+└── Road Network
+```
+
+## 📂 Project Structure
+
+```text
+DRRM/
 │
 ├── backend/
-│   ├── server.js              # Express app + all 19 API routes (~280 lines)
-│   ├── database.js            # In-memory CRUD store + sample data (~130 lines)
-│   ├── priorityScorer.js      # Priority formula + resource allocation (~80 lines)
-│   ├── routingEngine.js       # Graph + Dijkstra + multi-stop TSP (~170 lines)
-│   ├── package.json           # Dependencies
-│   └── .env                   # PORT and optional MONGODB_URI
+│   ├── server.js
+│   ├── database.js
+│   ├── priorityScorer.js
+│   ├── routingEngine.js
+│   ├── package.json
+│   └── .env
 │
 ├── frontend/
-│   ├── index.html             # SPA shell — 5 tabs + Leaflet.js CDN imports
-│   ├── app.js                 # All UI logic, API calls, map rendering (~400 lines)
-│   └── style.css              # Dark command-centre theme + map styles (~400 lines)
+│   ├── index.html
+│   ├── app.js
+│   └── style.css
 │
-├── ALGORITHMS.md              # Algorithm deep-dive
-├── API.md                     # API endpoint reference
-└── README.md                  # This file
-📦 Installation & Setup
-Prerequisites
-Node.js v18+ → nodejs.org
-npm (bundled with Node.js)
-A modern browser (Chrome, Firefox, or Edge)
-Internet connection (for OpenStreetMap tiles in the map)
-Step 1 — Install Backend Dependencies
-cd dssrCopy/backend
+├── API.md
+├── ALGORITHMS.md
+└── README.md
+```
+
+## 🚀 Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/panerumanish88-dot/DRRM.git
+```
+
+### Move Into Project
+
+```bash
+cd DRRM/backend
+```
+
+### Install Dependencies
+
+```bash
 npm install
-Step 2 — Configure Environment (Optional)
-Create a .env file inside backend/:
+```
 
-PORT=3000
-# Optional — only needed if upgrading to real MongoDB
-MONGODB_URI=mongodb://localhost:27017/disaster-relief
-The server defaults to port 3000 if no .env is present.
+### Start Server
 
-Step 3 — Start the Backend Server
-# Standard start
-node server.js
-
-# Auto-restart on file changes (recommended during development)
+```bash
 npm run dev
-Expected output:
+```
 
-🚨 Disaster Relief API running on port 3000
-📍 Access API at: http://localhost:3000
-📊 Health check: http://localhost:3000/
-Step 4 — Open the Frontend
-# Option A: Open the file directly in your browser
-open dssrCopy/frontend/index.html
+Server runs at:
 
-# Option B: Serve with a local HTTP server (avoids any file:// CORS quirks)
-cd dssrCopy/frontend
-npx serve .
-⚠️ Always start the backend BEFORE opening the frontend. The page loads all data on startup. If the backend is not running, the map will show zeros. Click Refresh Map after starting the backend to reload.
+```text
+http://localhost:3000
+```
 
-🚀 Usage
-Basic Workflow
-1. Dashboard & Map
+---
 
-Open the app — the Network Overview Map loads automatically
-Green dots = relief centers, coloured dots = affected areas, lines = roads
-One dashed red line is visible by default (Road #7 is blocked in sample data)
-2. Compute Priorities
+## 🚀 Usage
 
-Click the Priority Scoring tab
-Click "Calculate All Priorities"
-Areas are ranked by urgency score; map markers update colour instantly:
-🔴 Red = High priority (score ≥ 0.7) — animated pulse ring
-🟠 Orange = Medium priority (score ≥ 0.4)
-🔵 Blue = Low priority (score < 0.4)
-3. Plan a Route
+### Step 1
+Start Backend Server
 
-Click the Route Planning tab
-Select a relief center and an affected area
-Optionally check "Optimize by Time" instead of distance
-Click "Find Shortest Route" — the path is shown as a visual node chain
-4. Multi-Stop Route
+### Step 2
+Open Frontend
 
-On the same tab, use the right panel to select multiple areas
-Click "Plan Multi-Stop Route" — uses nearest-neighbour TSP heuristic
-5. Add New Data
+### Step 3
+Calculate Priority Scores
 
-Click the Resource Management tab
-Fill in any of the three forms (Add Center / Add Area / Add Road)
-New entries appear in the dashboard lists and on the map immediately
-6. What-If Simulation
+### Step 4
+Allocate Resources
 
-Click the What-If Analysis tab
-Select a road and choose Block or Unblock
-Click "Run Simulation" — see how priorities would change without saving
-The map updates to show the simulated road status
-Sample Scenario (Built-in Data)
-Entity	Details
-Central Relief Hub	Lat 27.1767, Lng 78.0081 · 1000 food, 2000 water, 500 medical
-North District Warehouse	Lat 27.25, Lng 78.10 · 800 food, 1500 water, 400 medical
-Flood Zone A	Severity 5, 250 people, Difficult access
-Village Beta	Severity 3, 150 people, Easy access
-Landslide Area C	Severity 4, 400 people, Difficult access
-Road #7	Village Beta ↔ Landslide Area C — BLOCKED by default
-🗺️ Network Overview Map
-The map is the centrepiece of the Dashboard tab. Here is how it works technically.
+### Step 5
+Generate Delivery Routes
 
-Initialisation
-Leaflet is loaded from a CDN — no npm install required:
+### Step 6
+Run Simulations
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-Layer System
-Three independent L.layerGroup() instances allow toggling:
+---
 
-Layer	Contents	Style
-centerLayer	Relief center markers	Green static circles
-areaLayer	Affected area markers	Red/Orange/Blue by priority; pulse ring on high
-routeLayer	Road polylines	Blue solid (open), Red dashed (blocked)
-Correct Loading Order
-Roads need coordinates to draw lines. The loading sequence is enforced with await:
+## 🧮 Algorithms Used
 
-async function loadAllData() {
-  await loadCenters();  // populates locCoords for center IDs
-  await loadAreas();    // populates locCoords for area IDs (id+1000)
-  await loadRoads();    // all coordinates ready — road lines draw correctly
-}
-Tab Switch Fix
-When the Dashboard tab is hidden, Leaflet cannot measure the container. On re-activation:
+### Priority Scoring Formula
 
-if (targetTab === 'dashboard' && networkMap) {
-  setTimeout(() => networkMap.invalidateSize(), 50);
-}
-📡 API Documentation
-Base URL: http://localhost:3000
+```text
+P = 0.5 × (Severity / 5)
+  + 0.3 × (Population / Max Population)
+  + 0.2 × Access Difficulty
+```
 
-All endpoints return a consistent JSON envelope:
+### Dijkstra's Algorithm
 
-{ "success": true,  "count": 3, "data": [ ... ] }
-{ "success": false, "error": "Descriptive error message" }
-Relief Centers
-Method	Endpoint	Description
-GET	/centers	Get all relief centers
-GET	/centers/:id	Get a single center by ID
-POST	/centers	Add a new relief center
-PUT	/centers/:id	Update an existing center
-DELETE	/centers/:id	Delete a center
-POST /centers body:
+Used for:
 
-{
-  "name": "Dehradun Hub",
-  "latitude": 30.3165,
-  "longitude": 78.0322,
-  "total_food_kits": 750,
-  "total_water_units": 1500,
-  "total_medical_kits": 250
-}
-Affected Areas
-Method	Endpoint	Description
-GET	/areas	Get all areas (includes priority_score if computed)
-GET	/areas/:id	Get a single area by ID
-POST	/areas	Add a new affected area
-PUT	/areas/:id	Update an existing area
-DELETE	/areas/:id	Delete an area
-POST /areas body:
+- Shortest path calculation
+- Route optimization
+- Blocked road avoidance
 
-{
-  "name": "Kedarnath Village",
-  "latitude": 30.7346,
-  "longitude": 79.0669,
-  "people_count": 500,
-  "severity": 5,
-  "access_difficulty": 1,
-  "required_food_kits": 300,
-  "required_water_units": 600,
-  "required_medical_kits": 100
-}
-Roads
-Method	Endpoint	Description
-GET	/roads	Get all road connections
-POST	/roads	Add a new road connection
-PUT	/roads/:id	Update a road (e.g. block/unblock)
-DELETE	/roads/:id	Delete a road
-POST /roads body:
+Complexity:
 
-{
-  "from_location_id": 1,
-  "to_location_id": 1001,
-  "distance_km": 15.5,
-  "travel_time_minutes": 45,
-  "is_blocked": false
-}
-Analytics & Routing
-Method	Endpoint	Description
-POST	/compute-priorities	Calculate and store priority scores for all areas
-POST	/allocate-resources	Compute proportional resource allocation
-GET	/routes?centerId=1&areaId=2&useTime=false	Find shortest single route
-POST	/routes/multi-stop	Find multi-stop route
-POST	/simulate	Run what-if simulation (non-destructive)
-GET /routes query params:
+```text
+O(V²)
+```
 
-Param	Type	Description
-centerId	Integer	Relief center ID
-areaId	Integer	Affected area ID (raw, not graph ID)
-useTime	Boolean	true = optimise by time, false = by distance
-POST /routes/multi-stop body:
+### Multi-Stop Routing
 
-{
-  "centerId": 1,
-  "areaIds": [1, 2, 3],
-  "useTime": false
-}
-POST /simulate body:
+Nearest Neighbour TSP Heuristic
 
-{
-  "roadId": 7,
-  "blocked": true
-}
-Quick Test (curl)
-# Health check
-curl http://localhost:3000/
+Benefits:
 
-# Get all centers
-curl http://localhost:3000/centers
+- Fast computation
+- Good route approximation
+- Suitable for emergency logistics
 
-# Compute priorities
-curl -X POST http://localhost:3000/compute-priorities
+### Resource Allocation
 
-# Find route (center 1 to area 2, by distance)
-curl "http://localhost:3000/routes?centerId=1&areaId=2&useTime=false"
+```text
+Allocation = Required × Ratio
+```
 
-# Block road #7
-curl -X PUT http://localhost:3000/roads/7 \
-     -H "Content-Type: application/json" \
-     -d '{"is_blocked": true}'
-🧮 Algorithms
-1. Priority Scoring
-Formula:
+Ensures fair distribution when resources are limited.
 
-P = 0.5 × (severity / 5)  +  0.3 × (people / max_people)  +  0.2 × access_difficulty
-Component	Weight	Rationale
-Severity	50%	Directly reflects immediate danger to life
-Population (normalised)	30%	More people = greater total need
-Access Difficulty	20%	Hard-to-reach areas may need priority scheduling
-Example — Flood Zone A:
+---
 
-severity     = 5   → S_norm = 5/5   = 1.0
-people       = 250 → N_norm = 250/400 = 0.625   (max is Landslide Area C with 400)
-access       = 1   (difficult)
+## 🔌 REST API Highlights
 
-P = 0.5(1.0) + 0.3(0.625) + 0.2(1)
-  = 0.5 + 0.1875 + 0.2
-  = 0.8875  → HIGH PRIORITY (red marker, pulse animation)
-Time complexity: O(n log n) — one pass to find max, then sort
+### Centers
 
-2. Dijkstra's Shortest Path
-Purpose: Find optimal route from a relief center to an affected area.
+```http
+GET /centers
+POST /centers
+PUT /centers/:id
+DELETE /centers/:id
+```
 
-Steps:
+### Areas
 
-Initialise all node distances to ∞; source node distance = 0
-Add all nodes to an unvisited set
-Pick the unvisited node with the smallest known distance
-For each neighbour, compute tentative distance (current + edge weight)
-If tentative < stored, update it and record the predecessor
-Mark current node as visited; stop if it is the destination
-Reconstruct path by backtracking through the predecessor map
-Key details:
+```http
+GET /areas
+POST /areas
+PUT /areas/:id
+DELETE /areas/:id
+```
 
-Nodes = all relief centers + all affected areas
-Edges = road connections (blocked roads are excluded entirely from the graph)
-Edge weight = distance_km or travel_time_minutes depending on useTime flag
-Time complexity: O(V²) with Set — sufficient for small networks; upgradeable to O((V+E) log V) with a binary heap
-3. Multi-Stop Routing (TSP Nearest-Neighbour)
-Finding the exact shortest route visiting N areas is NP-hard (Travelling Salesman Problem). The nearest-neighbour heuristic gives a good approximation in polynomial time:
+### Roads
 
-Start at the relief center
-Run Dijkstra to every unvisited area; pick the nearest
-Move there, mark visited
-Repeat until all areas are visited
-Return to the starting center
-Quality: Typically within 20–25% of optimal. For 3–10 areas (typical disaster scenario) this is excellent performance with near-instant computation.
+```http
+GET /roads
+POST /roads
+PUT /roads/:id
+DELETE /roads/:id
+```
 
-Time complexity: O(N²) where N = number of selected areas
+### Analytics
 
-4. Resource Allocation
-Proportional distribution when supply cannot fully meet demand:
+```http
+POST /compute-priorities
+POST /allocate-resources
+POST /simulate
+```
 
-ratio = min(totalAvailable / totalRequired, 1.0)  // per resource type
-allocation = Math.floor(area.required × ratio)
-If supply ≥ demand, ratio = 1.0 and all needs are fully met. If supply < demand, every area gets the same proportional share.
+### Routing
 
-🐛 Troubleshooting
-Symptom	Cause	Fix
-Map shows 0 for all counts	Frontend loaded before backend started	Start backend first; click Refresh Map
-Map is blank / no tiles	No internet connection	OpenStreetMap tiles require internet access
-CORS error in browser console	Backend not running or wrong port	Verify server is on port 3000; check API_URL in app.js
-Route says "No route found"	All paths between nodes are blocked	Unblock a road or add an alternative connection
-Priority scores are all 0	Priorities not computed yet	Click "Calculate All Priorities" on Priority Scoring tab
-Map looks wrong after tab switch	Leaflet cannot measure hidden container	Already fixed — invalidateSize() fires on tab activation
-"Module not found" on start	Dependencies not installed	Run cd backend && npm install
-Port 3000 already in use	Another process using the port	Change PORT=3001 in .env and update API_URL in app.js
-🚀 Future Enhancements
- Real MongoDB / MongoDB Atlas integration (interface is already compatible)
- Real-time updates with Socket.io — push road-status changes to all dashboards instantly
- Route visualisation drawn on the map as a highlighted polyline
- Mobile responsive layout improvements
- JWT authentication with role-based access (field worker / coordinator / admin)
- Real-time satellite imagery integration (ISRO NDEM API)
- Machine learning for disaster severity prediction
- Multi-vehicle route optimisation
- SMS / WhatsApp integration for field updates
- Blockchain-based supply chain tracking
- IoT sensor integration
- Multi-language support
- A* pathfinding upgrade using GPS coordinates as heuristic
- 2-opt improvement for multi-stop route quality
-📄 License
+```http
+GET /routes
+POST /routes/multi-stop
+```
+
+---
+
+## 🚀 Future Enhancements
+
+- MongoDB Atlas Integration
+- JWT Authentication
+- Socket.io Real-Time Updates
+- Mobile Responsive Dashboard
+- Satellite Data Integration
+- AI-Based Severity Prediction
+- Multi-Vehicle Route Optimization
+- WhatsApp Notifications
+- IoT Sensor Integration
+- A* Pathfinding Upgrade
+
+---
+
+## 👨‍💻 Author
+
+### Manish Paneru
+
+📧 Email: panerumanish88@gmail.com
+
+🔗 GitHub: https://github.com/panerumanish88-dot
+
+💻 Full Stack Developer | DSA Enthusiast | Open Source Learner
+
+---
+
+## 📄 License
+
 This project is licensed under the MIT License.
 
-👥 Authors
-Manish paneru — Initial work and development 📧 panerumanish88@gmail.com
+---
 
-🙏 Acknowledgments
-India Disaster Resource Network (IDRN) for data references
-National Disaster Management Authority (NDMA) for operational guidelines
-OpenStreetMap contributors for map tile data
-Leaflet.js team for the excellent open-source mapping library
-MongoDB and Express.js communities for documentation
-Made with ❤️ for disaster relief operations
+## ⭐ Support
 
-About
-No description, website, or topics provided.
-Resources
- Readme
- Activity
-Stars
- 0 stars
-Watchers
- 0 watching
-Forks
- 0 forks
-Report repository
-Releases
-No releases published
-Packages
-No packages published
-Contributors
-2
-@manishpaneru
-Manishpaneru Manish Paneru
-@Copilot
-Copilot
-Languages
-JavaScript
-60.9%
- 
-HTML
-20.3%
- 
-CSS
-18.8%
-Footer
+If you found this project useful, consider giving it a star.
+
+Made with ❤️ by **Manish Paneru**
