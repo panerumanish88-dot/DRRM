@@ -174,104 +174,252 @@ http://localhost:3000
 
 # 🚀 Usage
 
-Basic Workflow
-1. Dashboard & Map
+## Basic Workflow
 
-Open the app — the Network Overview Map loads automatically
-Green dots = relief centers, coloured dots = affected areas, lines = roads
-One dashed red line is visible by default (Road #7 is blocked in sample data)
-2. Compute Priorities
+### 1️⃣ Dashboard & Network Overview
 
-Click the Priority Scoring tab
-Click "Calculate All Priorities"
-Areas are ranked by urgency score; map markers update colour instantly:
-🔴 Red = High priority (score ≥ 0.7) — animated pulse ring
-🟠 Orange = Medium priority (score ≥ 0.4)
-🔵 Blue = Low priority (score < 0.4)
-3. Plan a Route
+After launching the application, the **Network Overview Map** loads automatically.
 
-Click the Route Planning tab
-Select a relief center and an affected area
-Optionally check "Optimize by Time" instead of distance
-Click "Find Shortest Route" — the path is shown as a visual node chain
-4. Multi-Stop Route
+#### Map Indicators
 
-On the same tab, use the right panel to select multiple areas
-Click "Plan Multi-Stop Route" — uses nearest-neighbour TSP heuristic
-5. Add New Data
+🟢 **Green Markers** → Relief Centers
 
-Click the Resource Management tab
-Fill in any of the three forms (Add Center / Add Area / Add Road)
-New entries appear in the dashboard lists and on the map immediately
-6. What-If Simulation
+🔴 **Red Markers** → High Priority Areas
 
-Click the What-If Analysis tab
-Select a road and choose Block or Unblock
-Click "Run Simulation" — see how priorities would change without saving
-The map updates to show the simulated road status
-Sample Scenario (Built-in Data)
-Entity	Details
-Central Relief Hub	Lat 27.1767, Lng 78.0081 · 1000 food, 2000 water, 500 medical
-North District Warehouse	Lat 27.25, Lng 78.10 · 800 food, 1500 water, 400 medical
-Flood Zone A	Severity 5, 250 people, Difficult access
-Village Beta	Severity 3, 150 people, Easy access
-Landslide Area C	Severity 4, 400 people, Difficult access
-Road #7	Village Beta ↔ Landslide Area C — BLOCKED by default
+🟠 **Orange Markers** → Medium Priority Areas
 
+🔵 **Blue Markers** → Low Priority Areas
+
+🛣️ **Blue Lines** → Open Roads
+
+🚫 **Red Dashed Lines** → Blocked Roads
+
+> By default, **Road #7** is blocked in the sample dataset.
+
+---
+
+### 2️⃣ Calculate Priority Scores
+
+Navigate to the **Priority Scoring** tab and click:
+
+```text
+Calculate All Priorities
+```
+
+The system evaluates all affected areas using:
+
+- Disaster Severity
+- Population Impact
+- Accessibility Difficulty
+
+#### Priority Levels
+
+| Level | Score Range | Color |
+|---------|------------|---------|
+| High | ≥ 0.7 | 🔴 Red |
+| Medium | ≥ 0.4 | 🟠 Orange |
+| Low | < 0.4 | 🔵 Blue |
+
+Map markers update automatically after scoring.
+
+---
+
+### 3️⃣ Route Planning
+
+Navigate to the **Route Planning** tab.
+
+#### Steps
+
+1. Select a Relief Center
+2. Select an Affected Area
+3. Choose Routing Mode:
+   - Distance Optimized
+   - Time Optimized
+4. Click **Find Shortest Route**
+
+The system computes the shortest path using **Dijkstra's Algorithm**.
+
+---
+
+### 4️⃣ Multi-Stop Route Optimization
+
+For deliveries involving multiple locations:
+
+1. Select multiple affected areas
+2. Click:
+
+```text
+Plan Multi-Stop Route
+```
+
+The application uses a **Nearest-Neighbour TSP Heuristic** to generate an efficient delivery sequence.
+
+---
+
+### 5️⃣ Resource Management
+
+Navigate to the **Resource Management** tab.
+
+You can:
+
+✅ Add Relief Centers
+
+✅ Add Affected Areas
+
+✅ Add Road Connections
+
+Changes are reflected instantly across:
+
+- Dashboard
+- Analytics
+- Network Map
+
+---
+
+### 6️⃣ What-If Simulation
+
+Navigate to the **What-If Analysis** tab.
+
+#### Available Actions
+
+- Block a Road
+- Unblock a Road
+
+Click:
+
+```text
+Run Simulation
+```
+
+The simulation updates network conditions without permanently modifying stored data.
+
+Perfect for testing emergency scenarios before taking action.
+
+---
+
+# 📋 Sample Scenario
+
+The project comes with preloaded demonstration data.
+
+| Entity | Details |
+|----------|----------|
+| Central Relief Hub | 1000 Food Kits, 2000 Water Units, 500 Medical Kits |
+| North District Warehouse | 800 Food Kits, 1500 Water Units, 400 Medical Kits |
+| Flood Zone A | Severity 5 • 250 People • Difficult Access |
+| Village Beta | Severity 3 • 150 People • Easy Access |
+| Landslide Area C | Severity 4 • 400 People • Difficult Access |
+| Road #7 | Blocked by Default |
 
 ---
 
 # 🗺️ Network Overview Map
 
-The map is the centrepiece of the Dashboard tab. Here is how it works technically.
+The interactive map serves as the operational center of the application.
 
-Initialisation
-Leaflet is loaded from a CDN — no npm install required:
+## Key Features
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-Layer System
-Three independent L.layerGroup() instances allow toggling:
+✅ Real-Time Network Visualization
 
-Layer	Contents	Style
-centerLayer	Relief center markers	Green static circles
-areaLayer	Affected area markers	Red/Orange/Blue by priority; pulse ring on high
-routeLayer	Road polylines	Blue solid (open), Red dashed (blocked)
-Correct Loading Order
-Roads need coordinates to draw lines. The loading sequence is enforced with await:
+✅ Relief Center Tracking
 
+✅ Priority-Based Area Highlighting
+
+✅ Road Status Monitoring
+
+✅ Layer Visibility Controls
+
+✅ Interactive Popups
+
+✅ Auto Refresh on Data Changes
+
+---
+
+## Map Layer System
+
+| Layer | Purpose | Style |
+|---------|---------|---------|
+| centerLayer | Relief Centers | 🟢 Green Markers |
+| areaLayer | Affected Areas | 🔴🟠🔵 Priority Colors |
+| routeLayer | Road Network | 🔵 Open / 🔴 Blocked |
+
+---
+
+## Data Loading Sequence
+
+Roads require valid coordinates before rendering.
+
+```javascript
 async function loadAllData() {
-  await loadCenters();  // populates locCoords for center IDs
-  await loadAreas();    // populates locCoords for area IDs (id+1000)
-  await loadRoads();    // all coordinates ready — road lines draw correctly
+  await loadCenters();
+  await loadAreas();
+  await loadRoads();
 }
-Tab Switch Fix
-When the Dashboard tab is hidden, Leaflet cannot measure the container. On re-activation:
+```
 
-if (targetTab === 'dashboard' && networkMap) {
+This ensures all routes are drawn correctly.
+
+---
+
+## Dashboard Resize Fix
+
+Leaflet cannot correctly calculate dimensions when hidden inside inactive tabs.
+
+```javascript
+if (targetTab === "dashboard" && networkMap) {
   setTimeout(() => networkMap.invalidateSize(), 50);
 }
+```
 
+This guarantees proper map rendering whenever the Dashboard tab becomes active.
 
 ---
 
 # 📡 API Documentation
 
-Base URL: http://localhost:3000
+### Base URL
 
-All endpoints return a consistent JSON envelope:
+```text
+http://localhost:3000
+```
 
-{ "success": true,  "count": 3, "data": [ ... ] }
-{ "success": false, "error": "Descriptive error message" }
-Relief Centers
-Method	Endpoint	Description
-GET	/centers	Get all relief centers
-GET	/centers/:id	Get a single center by ID
-POST	/centers	Add a new relief center
-PUT	/centers/:id	Update an existing center
-DELETE	/centers/:id	Delete a center
-POST /centers body:
+---
 
+## Standard Response Format
+
+### Success Response
+
+```json
+{
+  "success": true,
+  "count": 3,
+  "data": [...]
+}
+```
+
+### Error Response
+
+```json
+{
+  "success": false,
+  "error": "Descriptive error message"
+}
+```
+
+---
+
+## Relief Centers API
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | /centers | Get all relief centers |
+| GET | /centers/:id | Get center by ID |
+| POST | /centers | Create center |
+| PUT | /centers/:id | Update center |
+| DELETE | /centers/:id | Delete center |
+
+### Example Request
+
+```json
 {
   "name": "Dehradun Hub",
   "latitude": 30.3165,
@@ -280,15 +428,23 @@ POST /centers body:
   "total_water_units": 1500,
   "total_medical_kits": 250
 }
-Affected Areas
-Method	Endpoint	Description
-GET	/areas	Get all areas (includes priority_score if computed)
-GET	/areas/:id	Get a single area by ID
-POST	/areas	Add a new affected area
-PUT	/areas/:id	Update an existing area
-DELETE	/areas/:id	Delete an area
-POST /areas body:
+```
 
+---
+
+## Affected Areas API
+
+| Method | Endpoint |
+|---------|----------|
+| GET | /areas |
+| GET | /areas/:id |
+| POST | /areas |
+| PUT | /areas/:id |
+| DELETE | /areas/:id |
+
+### Example Request
+
+```json
 {
   "name": "Kedarnath Village",
   "latitude": 30.7346,
@@ -300,14 +456,22 @@ POST /areas body:
   "required_water_units": 600,
   "required_medical_kits": 100
 }
-Roads
-Method	Endpoint	Description
-GET	/roads	Get all road connections
-POST	/roads	Add a new road connection
-PUT	/roads/:id	Update a road (e.g. block/unblock)
-DELETE	/roads/:id	Delete a road
-POST /roads body:
+```
 
+---
+
+## Roads API
+
+| Method | Endpoint |
+|---------|----------|
+| GET | /roads |
+| POST | /roads |
+| PUT | /roads/:id |
+| DELETE | /roads/:id |
+
+### Example Request
+
+```json
 {
   "from_location_id": 1,
   "to_location_id": 1001,
@@ -315,49 +479,55 @@ POST /roads body:
   "travel_time_minutes": 45,
   "is_blocked": false
 }
-Analytics & Routing
-Method	Endpoint	Description
-POST	/compute-priorities	Calculate and store priority scores for all areas
-POST	/allocate-resources	Compute proportional resource allocation
-GET	/routes?centerId=1&areaId=2&useTime=false	Find shortest single route
-POST	/routes/multi-stop	Find multi-stop route
-POST	/simulate	Run what-if simulation (non-destructive)
-GET /routes query params:
+```
 
-Param	Type	Description
-centerId	Integer	Relief center ID
-areaId	Integer	Affected area ID (raw, not graph ID)
-useTime	Boolean	true = optimise by time, false = by distance
-POST /routes/multi-stop body:
+---
 
-{
-  "centerId": 1,
-  "areaIds": [1, 2, 3],
-  "useTime": false
-}
-POST /simulate body:
+## Analytics & Routing APIs
 
-{
-  "roadId": 7,
-  "blocked": true
-}
-Quick Test (curl)
-# Health check
+| Method | Endpoint | Purpose |
+|---------|----------|---------|
+| POST | /compute-priorities | Calculate priorities |
+| POST | /allocate-resources | Allocate resources |
+| GET | /routes | Find shortest route |
+| POST | /routes/multi-stop | Multi-stop routing |
+| POST | /simulate | Scenario simulation |
+
+---
+
+## Quick API Testing
+
+### Health Check
+
+```bash
 curl http://localhost:3000/
+```
 
-# Get all centers
+### Get Centers
+
+```bash
 curl http://localhost:3000/centers
+```
 
-# Compute priorities
+### Compute Priorities
+
+```bash
 curl -X POST http://localhost:3000/compute-priorities
+```
 
-# Find route (center 1 to area 2, by distance)
+### Find Route
+
+```bash
 curl "http://localhost:3000/routes?centerId=1&areaId=2&useTime=false"
+```
 
-# Block road #7
+### Block Road
+
+```bash
 curl -X PUT http://localhost:3000/roads/7 \
-     -H "Content-Type: application/json" \
-     -d '{"is_blocked": true}'
+-H "Content-Type: application/json" \
+-d '{"is_blocked": true}'
+```
 
 
 ---
